@@ -1,0 +1,58 @@
+-- Task 3: Writing Basic SELECT Queries
+
+-- 1. Select all columns from the Books table
+SELECT * FROM Books;
+
+-- 2. Select specific columns: title and genre from Books
+SELECT title, genre FROM Books;
+
+-- 3. Get all books published after 2000
+SELECT title, published_year FROM Books
+WHERE published_year > 2000;
+
+-- 4. Get all Fantasy books written by a specific author (e.g., J.K. Rowling)
+SELECT b.title, b.genre, a.name
+FROM Books b
+JOIN Authors a ON b.author_id = a.author_id
+WHERE b.genre = 'Fantasy' AND a.name = 'J.K. Rowling';
+
+-- 5. Find all members whose name starts with 'A'
+SELECT * FROM Members
+WHERE name LIKE 'A%';
+
+-- 6. Find members who joined between 2020-01-01 and 2024-01-01
+SELECT name, join_date FROM Members
+WHERE join_date BETWEEN '2020-01-01' AND '2024-01-01';
+
+-- 7. Get a list of issued books that have not been returned
+SELECT ib.issue_id, b.title, m.name AS member_name
+FROM IssuedBooks ib
+JOIN Books b ON ib.book_id = b.book_id
+JOIN Members m ON ib.member_id = m.member_id
+WHERE ib.return_date IS NULL;
+
+-- 8. Order books by number of available copies (descending)
+SELECT title, copies_available FROM Books
+ORDER BY copies_available DESC;
+
+-- 9. List the 5 most recently issued books
+SELECT ib.issue_id, b.title, ib.issue_date
+FROM IssuedBooks ib
+JOIN Books b ON ib.book_id = b.book_id
+ORDER BY ib.issue_date DESC
+LIMIT 5;
+
+-- 10. Get all books where genre is missing (NULL)
+SELECT * FROM Books
+WHERE genre IS NULL;
+
+-- 11. List all authors who have written more than 1 book
+SELECT a.name, COUNT(b.book_id) AS book_count
+FROM Authors a
+JOIN Books b ON a.author_id = b.author_id
+GROUP BY a.author_id
+HAVING COUNT(b.book_id) > 1;
+
+-- 12. Find books with titles containing the word 'Harry'
+SELECT * FROM Books
+WHERE title LIKE '%Harry%';
